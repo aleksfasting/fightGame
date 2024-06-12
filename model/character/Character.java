@@ -44,6 +44,12 @@ public class Character implements Creature, Playable {
     }
 
     @Override
+    public void die() {
+        xPosition = 400;
+        yPosition = 100;
+    }
+
+    @Override
     public void jump() {
        ySpeed = -10;
        xPosition += xSpeed;
@@ -66,12 +72,14 @@ public class Character implements Creature, Playable {
         punching = true;
     }
 
+    @Override
     public void stun(int time) {
         stunned = true;
         ySpeed = 0;
         imageIndex = 0;
     }
 
+    @Override
     public boolean isStunned() {
         return stunned;
     }
@@ -86,18 +94,22 @@ public class Character implements Creature, Playable {
 
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getSelectedIMG() {
         return selectedIMG;
     }
 
+    @Override
     public boolean isJumping() {
         return jumping;
     }
 
+    @Override
     public String getImgPath() {
         return imgPath;
     }
@@ -139,14 +151,6 @@ public class Character implements Creature, Playable {
     }
 
     @Override
-    public void moveLeft(float f) {
-        xPosition += speed * f;
-        if (!jumping) {
-            selectedIMG = "run_l" + (int)(imageIndex/12) + ".png";
-        }
-        facingRight = false;
-    }
-
     public void stand() {
         if (facingRight) {
             if (punching) {
@@ -168,12 +172,16 @@ public class Character implements Creature, Playable {
     }
 
     @Override
-    public void moveRight(float f) {
+    public void moveXPosition(float f) {
         xPosition += speed * f;
+        facingRight = (f > 0);
         if (!jumping) {
-            selectedIMG = "run_r" + (int)(imageIndex/12) + ".png";
+            if (facingRight) {
+                selectedIMG = "run_r" + (int)(imageIndex/12) + ".png";
+            } else {
+                selectedIMG = "run_l" + (int)(imageIndex/12) + ".png";
+            }
         }
-        facingRight = true;
     }
 
     @Override
@@ -186,7 +194,8 @@ public class Character implements Creature, Playable {
         return (int)yPosition;
     }
 
-    public void fall(int height) {
+    @Override
+    public void fall(int width, int height) {
         if (jumping && !punching) {
             if (facingRight) {
                 selectedIMG = "jump_r.png";
@@ -206,6 +215,9 @@ public class Character implements Creature, Playable {
             yPosition = height-this.height;
             ySpeed = 0;
             jumping = false;
+        }
+        if (xPosition < -250 || xPosition > width + 250) {
+            die();
         }
     }
 }

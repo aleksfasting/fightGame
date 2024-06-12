@@ -27,7 +27,7 @@ public class Field {
     public void act(KeyboardController kbC) {
         kbC.pollController();
         for (Character c : characters) {
-            c.fall(height);
+            c.fall(width, height);
             if (c.isStunned()) {
                 c.stand();
                 continue;
@@ -37,10 +37,8 @@ public class Field {
                 c.stun(1000);
                 continue;
             }
-            if (kbC.getX() < -0.2) {
-                c.moveLeft(kbC.getX());
-            } else if (kbC.getX() > 0.2) {
-                c.moveRight(kbC.getX());
+            if (Math.abs(kbC.getX()) > 0.2) {
+                c.moveXPosition(kbC.getX());
             } else if (!c.isJumping()) {
                 c.stand();
             }

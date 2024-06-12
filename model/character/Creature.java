@@ -5,8 +5,13 @@ public interface Creature {
     void setHealth(int health);
     void takeDamage(int damage);
     boolean getFacingDirection();
-    void moveLeft(float f);
-    void moveRight(float f);
+    void moveXPosition(float f);
     int getXPosition();
     int getYPosition();
+    void fall(int width, int height);
+    void stand();
+    String getImgPath();
+    String getSelectedIMG();
+    String getName();
+    void die();
 }
