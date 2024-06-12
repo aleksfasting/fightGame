@@ -16,7 +16,6 @@ public class Character implements Creature, Playable {
     private String imgPath;
     private boolean jumping;
     private int height;
-    private String selectedIMG;
     private int imageIndex;
     private boolean stunned;
     private boolean punching;
@@ -33,7 +32,6 @@ public class Character implements Creature, Playable {
         jumping = false;
         this.name = name;
         this.imgPath = imgPath;
-        this.selectedIMG = "stand_r.png";
         stunned = false;
 
         try {
@@ -54,21 +52,14 @@ public class Character implements Creature, Playable {
        ySpeed = -10;
        xPosition += xSpeed;
        jumping = true;
-       if (facingRight) {
-           selectedIMG = "jump_r.png";
-           return;
-       }
-       selectedIMG = "jump_l.png";
     }
 
     @Override
     public void quickAttack() {
         if (facingRight) {
-            selectedIMG = "qAttack_r0.png";
             punching = true;
             return;
         }
-        selectedIMG = "qAttack_l0.png";
         punching = true;
     }
 
@@ -101,7 +92,26 @@ public class Character implements Creature, Playable {
 
     @Override
     public String getSelectedIMG() {
-        return selectedIMG;
+        if (facingRight) {
+            if (punching) {
+                if (imageIndex > 27) {
+                    return "qAttack_r1.png";
+                }
+                return "qAttack_r0.png";
+            } else if (jumping) {
+                return "jump_r.png";
+            }
+            return "stand_r.png";
+        }
+        if (punching) {
+            if (imageIndex > 27) {
+                return "qAttack_l1.png";
+            }
+            return "qAttack_l0.png";
+        } else if (jumping) {
+            return "jump_l.png";
+        }
+        return "stand_l.png";
     }
 
     @Override
@@ -152,36 +162,12 @@ public class Character implements Creature, Playable {
 
     @Override
     public void stand() {
-        if (facingRight) {
-            if (punching) {
-                if (imageIndex > 27) {
-                    selectedIMG = "qAttack_r1.png";
-                }
-                return;
-            }
-            selectedIMG = "stand_r.png";
-            return;
-        }
-        if (punching) {
-            if (imageIndex > 27) {
-                selectedIMG = "qAttack_l1.png";
-            }
-            return;
-        }
-        selectedIMG = "stand_l.png";
     }
 
     @Override
     public void moveXPosition(float f) {
         xPosition += speed * f;
         facingRight = (f > 0);
-        if (!jumping) {
-            if (facingRight) {
-                selectedIMG = "run_r" + (int)(imageIndex/12) + ".png";
-            } else {
-                selectedIMG = "run_l" + (int)(imageIndex/12) + ".png";
-            }
-        }
     }
 
     @Override
@@ -196,13 +182,6 @@ public class Character implements Creature, Playable {
 
     @Override
     public void fall(int width, int height) {
-        if (jumping && !punching) {
-            if (facingRight) {
-                selectedIMG = "jump_r.png";
-            } else {
-                selectedIMG = "jump_l.png";
-            }
-        }
         imageIndex += 1;
         if (imageIndex == 48) {
             imageIndex = 0;
