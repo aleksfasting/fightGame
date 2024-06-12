@@ -10,8 +10,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import org.lwjgl.Sys;
-
 import controller.KeyboardController;
 import model.field.Field;
 import model.character.Character;
@@ -22,14 +20,13 @@ public class GamePanel extends JPanel implements Runnable {
     private BufferedImage buffer;
     KeyboardController kbController = new KeyboardController();
     
-    public GamePanel() {
-        setPreferredSize(new Dimension(1400, 800));
+    public GamePanel(int width, int height) {
+        setPreferredSize(new Dimension(width, height));
         setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 
-        this.field = new Field(1400, 800);
-        field.createSections();
+        this.field = new Field(height, width);
         field.addCharacter("c1", "resources/c1/");
     }
 

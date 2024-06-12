@@ -4,8 +4,6 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import model.field.Section;
-
 public class Character implements Creature, Playable {
     private double xPosition;
     private double yPosition;
@@ -14,7 +12,6 @@ public class Character implements Creature, Playable {
     private int health;
     private boolean facingRight;
     private int speed;
-    private Section section;
     private String name;
     private String imgPath;
     private boolean jumping;
@@ -24,8 +21,7 @@ public class Character implements Creature, Playable {
     private boolean stunned;
     private boolean punching;
 
-    public Character(Section s, String name, String imgPath) {
-        section = s;
+    public Character(String name, String imgPath) {
         xPosition = 100;
         yPosition = 100;
         xSpeed = 0;
