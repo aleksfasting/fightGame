@@ -19,6 +19,7 @@ public class Character implements Creature, Playable {
     private int imageIndex;
     private boolean stunned;
     private boolean punching;
+    private boolean moving;
 
     public Character(String name, String imgPath) {
         xPosition = 100;
@@ -33,6 +34,7 @@ public class Character implements Creature, Playable {
         this.name = name;
         this.imgPath = imgPath;
         stunned = false;
+        moving = false;
 
         try {
             height = ImageIO.read(new File(imgPath + "stand_r.png")).getHeight();
@@ -45,6 +47,11 @@ public class Character implements Creature, Playable {
     public void die() {
         xPosition = 400;
         yPosition = 100;
+        xSpeed = 0;
+        ySpeed = 0;
+        stunned = true;
+        jumping = true;
+        imageIndex = 0;
     }
 
     @Override
@@ -100,6 +107,8 @@ public class Character implements Creature, Playable {
                 return "qAttack_r0.png";
             } else if (jumping) {
                 return "jump_r.png";
+            } else if (moving) {
+                return "run_r" + (imageIndex / 12) + ".png";
             }
             return "stand_r.png";
         }
@@ -110,6 +119,8 @@ public class Character implements Creature, Playable {
             return "qAttack_l0.png";
         } else if (jumping) {
             return "jump_l.png";
+        } else if (moving) {
+            return "run_l" + (imageIndex / 12) + ".png";
         }
         return "stand_l.png";
     }
@@ -136,7 +147,6 @@ public class Character implements Creature, Playable {
 
     @Override
     public void dodge() {
-
         xPosition -= 10;
     }
 
@@ -162,12 +172,14 @@ public class Character implements Creature, Playable {
 
     @Override
     public void stand() {
+        moving = false;
     }
 
     @Override
     public void moveXPosition(float f) {
         xPosition += speed * f;
         facingRight = (f > 0);
+        moving = true;
     }
 
     @Override
