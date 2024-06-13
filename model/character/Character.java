@@ -30,7 +30,7 @@ public class Character implements Creature, Playable {
         imageIndex = 0;
         health = 100;
         facingRight = true;
-        speed = 8;
+        speed = 6;
         jumping = false;
         this.name = name;
         this.imgPath = imgPath;
@@ -212,7 +212,7 @@ public class Character implements Creature, Playable {
         imageIndex += 1;
         if (imageIndex == 48) {
             imageIndex = 0;
-            speed = 8;
+            speed = 6;
             stunned = false;
             punching = false;
         }
