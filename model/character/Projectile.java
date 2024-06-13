@@ -5,8 +5,8 @@ public class Projectile extends Damage {
     private int ySpeed;
     private double distance;
 
-    public Projectile(int damage, int xPos, int yPos, int radius, int xSpeed, int ySpeed, double distance) {
-        super(damage, xPos, yPos, radius);
+    public Projectile(String name, int damage, int xPos, int yPos, int radius, int delay, int xSpeed, int ySpeed, double distance) {
+        super(name, damage, xPos, yPos, radius, delay);
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.distance = distance;

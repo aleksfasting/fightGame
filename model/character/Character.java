@@ -1,6 +1,7 @@
 package model.character;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -21,8 +22,10 @@ public class Character implements Creature, Playable {
     private boolean punching;
     private boolean moving;
     private boolean falling;
+    private ArrayList<Damage> damages;
 
     public Character(String name, String imgPath) {
+        damages = new ArrayList<>();
         xPosition = 100;
         yPosition = 100;
         xSpeed = 0;
@@ -43,6 +46,12 @@ public class Character implements Creature, Playable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Damage> getDamages() {
+        ArrayList<Damage> damages = new ArrayList<>(this.damages);
+        this.damages.clear();
+        return damages;
     }
 
     @Override
@@ -72,6 +81,7 @@ public class Character implements Creature, Playable {
 
     @Override
     public void quickAttack() {
+        damages.add(new Damage(name, 10, (int) xPosition, (int) yPosition, 20, 10));
         imageIndex = 24;
         speed = speed/2;
         punching = true;
