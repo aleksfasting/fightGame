@@ -30,6 +30,9 @@ public class Field {
             c.fall(width, height);
             if (c.isStunned()) {
                 c.stand();
+            if (Math.abs(kbC.getX()) > 0.2) {
+                c.moveXPosition(kbC.getX());
+            }
                 continue;
             }
             if (kbC.getQAttack()) {
@@ -42,7 +45,7 @@ public class Field {
             } else if (!c.isJumping()) {
                 c.stand();
             }
-            if (kbC.getUp() && !c.isJumping()) {
+            if (kbC.getUp() && !c.isFalling()) {
                 c.jump();
             }
         }

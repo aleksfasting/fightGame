@@ -27,7 +27,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
 
         this.field = new Field(height, width);
-        field.addCharacter("c1", "resources/c1/");
+        // field.addCharacter("c1", "resources/c1/");
+        field.addCharacter("samurai", "resources/samurai/");
     }
 
     public void startGameThread() {

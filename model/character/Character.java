@@ -20,6 +20,7 @@ public class Character implements Creature, Playable {
     private boolean stunned;
     private boolean punching;
     private boolean moving;
+    private boolean falling;
 
     public Character(String name, String imgPath) {
         xPosition = 100;
@@ -29,12 +30,13 @@ public class Character implements Creature, Playable {
         imageIndex = 0;
         health = 100;
         facingRight = true;
-        speed = 5;
+        speed = 8;
         jumping = false;
         this.name = name;
         this.imgPath = imgPath;
         stunned = false;
         moving = false;
+        falling = false;
 
         try {
             height = ImageIO.read(new File(imgPath + "stand_r.png")).getHeight();
@@ -56,17 +58,22 @@ public class Character implements Creature, Playable {
 
     @Override
     public void jump() {
-       ySpeed = -10;
-       xPosition += xSpeed;
-       jumping = true;
+        ySpeed = -10;
+        xPosition += xSpeed;
+        if (jumping) {
+            falling = true;
+        }
+        jumping = true;
+    }
+
+    public boolean isFalling() {
+        return falling;
     }
 
     @Override
     public void quickAttack() {
-        if (facingRight) {
-            punching = true;
-            return;
-        }
+        imageIndex = 24;
+        speed = speed/2;
         punching = true;
     }
 
@@ -101,26 +108,34 @@ public class Character implements Creature, Playable {
     public String getSelectedIMG() {
         if (facingRight) {
             if (punching) {
-                if (imageIndex > 27) {
+                if (imageIndex > 40) {
+                    return "qAttack_r3.png";
+                } else if (imageIndex > 27) {
+                    return "qAttack_r2.png";
+                } else if (imageIndex > 25) {
                     return "qAttack_r1.png";
                 }
                 return "qAttack_r0.png";
             } else if (jumping) {
                 return "jump_r.png";
             } else if (moving) {
-                return "run_r" + (imageIndex / 12) + ".png";
+                return "run_r" + (imageIndex / 6) + ".png";
             }
             return "stand_r.png";
         }
         if (punching) {
-            if (imageIndex > 27) {
+            if (imageIndex > 40) {
+                return "qAttack_l3.png";
+            } else if (imageIndex > 27) {
+                return "qAttack_l2.png";
+            } else if (imageIndex > 25) {
                 return "qAttack_l1.png";
             }
             return "qAttack_l0.png";
         } else if (jumping) {
             return "jump_l.png";
         } else if (moving) {
-            return "run_l" + (imageIndex / 12) + ".png";
+            return "run_l" + (imageIndex / 6) + ".png";
         }
         return "stand_l.png";
     }
@@ -197,15 +212,17 @@ public class Character implements Creature, Playable {
         imageIndex += 1;
         if (imageIndex == 48) {
             imageIndex = 0;
+            speed = 8;
             stunned = false;
             punching = false;
         }
-        ySpeed += 0.1;
+        ySpeed += 0.15;
         yPosition += ySpeed;
         if (yPosition >= height-this.height) {
             yPosition = height-this.height;
             ySpeed = 0;
             jumping = false;
+            falling = false;
         }
         if (xPosition < -250 || xPosition > width + 250) {
             die();
