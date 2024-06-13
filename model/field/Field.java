@@ -4,13 +4,16 @@ import java.util.ArrayList;
 
 import controller.KeyboardController;
 import model.character.Character;
+import model.character.Damage;
 
 public class Field {
     private int width;
     private int height;
     private ArrayList<Character> characters;
+    private ArrayList<Damage> damages;
 
     public Field(int height, int width) {
+        damages = new ArrayList<Damage>();
         this.width = width;
         this.height = height;
         characters = new ArrayList<Character>();
@@ -24,9 +27,27 @@ public class Field {
         return characters;
     }
 
+    public void checkDamages() {
+        ArrayList<Damage> removals = new ArrayList<Damage>();
+        for (Damage d : damages) {
+            if (d.getState().equals("DEAD")) {
+                removals.add(d);
+            }
+        }
+        damages.removeAll(removals);
+    }
+
     public void act(KeyboardController kbC) {
         kbC.pollController();
+        checkDamages();
+        for (Damage d : damages) {
+            d.update();
+            if (d.getState().equals("ACTIVE")) {
+                System.out.println("HYYYAAAAA");
+            }
+        }
         for (Character c : characters) {
+            damages.addAll(c.getDamages());
             c.fall(width, height);
             if (c.isStunned()) {
                 c.stand();
